@@ -5,29 +5,20 @@
   <title>Document</title>
 </head>
 <body>
-<div>
+<div id="demo">
+  <input d-model="newTodo" placeholder="Input your new todo"/>
+  <button d-click="add()">Add</button>
   <ul>
-    <li>人员总数:</li>
-    <li data-repeat="people">
-      <input data-bind="value name">
-      ≡
-      <input data-bind="value name">
-      <ol>
-        <li data-repeat="hobbies">
-          <input data-bind="value label">
-          (exactly <span data-bind="count label"></span> letters)
-        </li>
-        <li>
-          <a href="#" data-bind="click addHobby">Add hobby…</a>
-        </li>
-      </ol>
+    <li d-repeat="item in todos">
+      <input type="checkbox" d-model="item.done"/>
+      <span d-class="done:item.done">{{item.title}}</span>
+      <a href="Javascript:" d-click="remove(item)">Remove</a>
     </li>
   </ul>
-  <a href="#" data-bind="click showStructure">Show structure</a>
 </div>
 <script src="dist/playvm.js"></script>
 <script>
-console.log(PlayVM);
+  PlayVM.compile(document.querySelector('#demo'));
 </script>
 </body>
 </html>

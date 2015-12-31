@@ -43,9 +43,64 @@ var PlayVM =
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var walk = __webpack_require__(1);
+	var compile = __webpack_require__(2);
+
+	module.exports = {
+	  walk: walk,
+	  compile: compile
+	};
+
+/***/ },
+/* 1 */
 /***/ function(module, exports) {
 
 	"use strict";
+
+	function walk(node, callback) {
+	  if (node.nodeType === 1 || node.nodeType === 3) {
+	    var returnValue = callback(node);
+	    if (returnValue === false) return;
+	  }
+
+	  if (node.nodeType === 1) {
+	    var current = node.firstChild;
+	    while (current) {
+	      walk(current, callback);
+	      current = current.nextSibling;
+	    }
+	  }
+	}
+
+	module.exports = walk;
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var walk = __webpack_require__(1);
+
+	function compile(element, context) {
+	  walk(element, function (element) {
+	    var collections = [];
+
+	    if (element.nodeType === 1) {
+	      var attrs = element.attributes;
+	      console.log(attrs);
+	    } else if (element.nodeType === 3) {
+	      var text = element.nodeValue;
+	      console.log(text);
+	    }
+	  });
+	}
+
+	module.exports = compile;
 
 /***/ }
 /******/ ]);
