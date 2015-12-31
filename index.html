@@ -5,30 +5,29 @@
   <title>Document</title>
 </head>
 <body>
-<div id='form'>
-  <label><span>name:</span>
-    <input name='name'>
-  </label>
-  <br>
-  <label><span>password:</span>
-    <input name='password'>
-  </label>
-  <pre>{
-  name: {{name}},
-  passowrd: {{password}}
-}</pre>
+<div>
+  <ul>
+    <li>人员总数:</li>
+    <li data-repeat="people">
+      <input data-bind="value name">
+      ≡
+      <input data-bind="value name">
+      <ol>
+        <li data-repeat="hobbies">
+          <input data-bind="value label">
+          (exactly <span data-bind="count label"></span> letters)
+        </li>
+        <li>
+          <a href="#" data-bind="click addHobby">Add hobby…</a>
+        </li>
+      </ol>
+    </li>
+  </ul>
+  <a href="#" data-bind="click showStructure">Show structure</a>
 </div>
-<script src="playvm.js"></script>
+<script src="dist/playvm.js"></script>
 <script>
-  var $ = document.querySelector.bind(document);
-
-  var form = playvm('#form', {
-    type: 'form', // 2 way
-    model: {
-      name: '',
-      password: ''
-    }
-  })
+console.log(PlayVM);
 </script>
 </body>
 </html>

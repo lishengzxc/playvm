@@ -8,3 +8,4 @@ http://lishengzxc.github.io/playvm/
 - http://www.ituring.com.cn/article/48463
 - https://github.com/JsAaron/mvvm
 - http://www.html-js.com/article/A-day-to-learn-JavaScript-using-the-native-JavaScript-data-binding
+- http://zhuanlan.zhihu.com/FrontendMagazine/20047033
