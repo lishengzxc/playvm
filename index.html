@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+<div id='form'>
+  <label><span>name:</span>
+    <input name='name'>
+  </label>
+  <br>
+  <label><span>password:</span>
+    <input name='password'>
+  </label>
+  <pre>{
+  name: {{name}},
+  passowrd: {{password}}
+}</pre>
+</div>
+<script src="playvm.js"></script>
+<script>
+  var $ = document.querySelector.bind(document);
+
+  var form = playvm('#form', {
+    type: 'form', // 2 way
+    model: {
+      name: '',
+      password: ''
+    }
+  })
+</script>
+</body>
+</html>
