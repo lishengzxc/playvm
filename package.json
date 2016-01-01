@@ -1,0 +1,34 @@
+{
+  "name": "playvm",
+  "version": "1.0.0",
+  "description": "This is a toy , to understand the principles of MVVM",
+  "main": "index.js",
+  "dependencies": {
+    "babel": "^6.3.13",
+    "babel-core": "^6.3.26",
+    "babel-loader": "^6.2.0",
+    "babel-preset-es2015": "^6.3.13",
+    "jsep": "^0.3.0",
+    "webpack": "^1.12.9"
+  },
+  "devDependencies": {
+    "jsep": "^0.3.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lishengzxc/playvm.git"
+  },
+  "keywords": [
+    "simple",
+    "mvvm"
+  ],
+  "author": "eric@lishengcn.cn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lishengzxc/playvm/issues"
+  },
+  "homepage": "https://github.com/lishengzxc/playvm#readme"
+}

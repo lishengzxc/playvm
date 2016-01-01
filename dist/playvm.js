@@ -162,7 +162,7 @@ var PlayVM =
 	  var parts = parseText(text);
 	  if (!parts) return '';
 	  var resultArray = [];
-	  for (var i = 0, j = parts.length; i < j; i++) {
+	  for (var i = 0, len = parts.length; i < len; i++) {
 	    var part = parts[i];
 	    if (part.type === 'text') {
 	      resultArray.push('"' + part.value + '"');
