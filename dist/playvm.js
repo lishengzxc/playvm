@@ -87,7 +87,7 @@ var PlayVM =
 	var walk = __webpack_require__(1);
 	var expression = __webpack_require__(3);
 	var inlineText = __webpack_require__(4);
-	var bind = __webpack_require__(7);
+	var bind = __webpack_require__(6);
 	var maybeIncludeExpression = expression.maybeIncludeExpression;
 
 	function compile(element, context) {
@@ -268,8 +268,7 @@ var PlayVM =
 	module.exports = parseText;
 
 /***/ },
-/* 6 */,
-/* 7 */
+/* 6 */
 /***/ function(module, exports) {
 
 	"use strict";

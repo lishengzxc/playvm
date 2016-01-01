@@ -103,8 +103,18 @@ function getDepends(string) {
   return depends;
 }
 
-function compile() {
+function compile(string, context) {
+  var converted = parser(string);
+  var body = 'return ' + converted + ';';
 
+  var fn = FUNCTIONS_CACHE[string];
+  if (!fn) {
+    fn = new Function(body);
+  }
+  if (context) {
+    return fn.bind(context);
+  }
+  return fn;
 }
 
 module.exports = {
