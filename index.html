@@ -12,7 +12,7 @@
     <li d-repeat="item in todos">
       <input type="checkbox" d-model="item.done"/>
       <span d-class="done:item.done">{{item.title}}</span>
-      <a href="Javascript:" d-click="remove(item)">Remove</a>
+      <button d-click="remove(item)">Remove</button>
     </li>
   </ul>
 </div>
