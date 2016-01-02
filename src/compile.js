@@ -1,12 +1,17 @@
 var walk = require('./walk');
 var expression = require('./expression');
 var inlineText = require('./parse/inline-text');
+var directive = require('./directive');
+var createDirective = directive.create;
+var isPairDirective = directive.isPair;
+var hasDirective = directive.has;
 var bind = require('./bind');
+var ViewModel = require('./view-model');
 var maybeIncludeExpression = expression.maybeIncludeExpression;
 
 
 function compile(element, context) {
-  //context = new ViewModel(context);
+  context = new ViewModel(context);
 
   walk(element, function (element) {
     var collections = [];
@@ -28,7 +33,13 @@ function compile(element, context) {
           });
         }
 
-        // todo: 如果有指令
+        if (hasDirective(attrKey)) {
+          collections.push({
+            type: attrKey,
+            attr: attrKey,
+            value: attrValue
+          });
+        }
 
 
         // todo: 如果指令是d-repeat
@@ -48,7 +59,7 @@ function compile(element, context) {
     }
 
     if (collections.length > 0) {
-      //bind(element, collections, context);
+      bind(element, collections, context);
     }
   });
 

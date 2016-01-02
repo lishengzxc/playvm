@@ -18,7 +18,22 @@
 </div>
 <script src="dist/playvm.js"></script>
 <script>
-  PlayVM.compile(document.querySelector('#demo'));
+  var context = {
+    newTodo: "",
+    todos: [
+      {title: 'first', done: true},
+      {title: 'second', done: false}
+    ],
+    add: function () {
+      this.todos.push({title: this.newTodo, done: false});
+      this.newTodo = '';
+    },
+    remove: function (item) {
+      this.todos.splice(this.todos.indexOf(item), 1);
+    }
+  };
+
+  PlayVM.compile(document.querySelector('#demo'), context);
 </script>
 </body>
 </html>

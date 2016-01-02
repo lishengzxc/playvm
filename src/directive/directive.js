@@ -3,7 +3,7 @@ var compileExpr = expr.compile;
 var getDepends = expr.getDepends;
 
 class Directive {
-  constructor(options = {}) {
+  constructor(options) {
     this.element = options.element;
     this.expression = options.extensions;
     this.context = options.context;
@@ -12,13 +12,17 @@ class Directive {
   }
 
   bind() {
-    this.valueFn = compileExpr(this.expression, this.context);
-    var depends = getDepends(this.expression);
-    var context = this.context;
+    if (this.element && this.expression && this.context) {
+      this.valueFn = compileExpr(this.expression, this.context);
+      var depends = getDepends(this.expression);
+      var context = this.context;
 
-    depends.forEach((depend) => {
-      context.$watch(depend, this)
-    });
+      depends.forEach((depend) => {
+        context.$watch(depend, this)
+      });
+
+      this.update();
+    }
   }
 
   unbind() {
@@ -37,6 +41,10 @@ class Directive {
     this.expression = null;
     this.context = null;
     this.valueFn = null;
+  }
+
+  update() {
+
   }
 }
 

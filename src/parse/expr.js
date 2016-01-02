@@ -50,10 +50,10 @@ function parse(string) {
 
       return 'this.' + ast.name;
     } else if (ast.type === 'CallExpression') {
-      var arguments = ast.arguments;
+      var args = ast.arguments;
       var parsedValues = [];
-      if (arguments) {
-        arguments.forEach(function (arg) {
+      if (args) {
+        args.forEach(function (arg) {
           parsedValues.push(astToCode(arg));
         });
       }
@@ -104,7 +104,8 @@ function getDepends(string) {
 }
 
 function compile(string, context) {
-  var converted = parser(string);
+  console.log(string);
+  var converted = parse(string);
   var body = 'return ' + converted + ';';
 
   var fn = FUNCTIONS_CACHE[string];
