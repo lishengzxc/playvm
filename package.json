@@ -12,7 +12,8 @@
     "webpack": "^1.12.9"
   },
   "devDependencies": {
-    "jsep": "^0.3.0"
+    "jsep": "^0.3.0",
+    "observed": "~1.1.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -22,8 +23,7 @@
     "url": "git+https://github.com/lishengzxc/playvm.git"
   },
   "keywords": [
-    "simple",
-    "mvvm"
+    "simple-mvvm"
   ],
   "author": "eric@lishengcn.cn",
   "license": "MIT",

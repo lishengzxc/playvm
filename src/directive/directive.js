@@ -5,7 +5,7 @@ var getDepends = expr.getDepends;
 class Directive {
   constructor(options) {
     this.element = options.element;
-    this.expression = options.extensions;
+    this.expression = options.expression;
     this.context = options.context;
 
     this.bind();

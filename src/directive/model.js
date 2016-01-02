@@ -25,17 +25,17 @@ class ModelDirective extends Directive {
     Directive.prototype.bind.call(this, arguments);
     var element = this.element;
 
-    var listener = function () {
+    var listener = () => {
       // todo: 其他表单的支持
-      if (element.type = 'checkbox') {
+      if (element.type === 'checkbox') {
         setter(this.context, this.expression, element.checked);
       } else {
         setter(this.context, this.expression, element.value);
       }
-
-      element.addEventListener('keyup', listener, false);
-      element.addEventListener('change', listener, false);
     };
+
+    element.addEventListener('keyup', listener, false);
+    element.addEventListener('change', listener, false);
   }
 
   update() {

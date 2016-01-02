@@ -12,7 +12,6 @@ var maybeIncludeExpression = expression.maybeIncludeExpression;
 
 function compile(element, context) {
   context = new ViewModel(context);
-
   walk(element, function (element) {
     var collections = [];
 
