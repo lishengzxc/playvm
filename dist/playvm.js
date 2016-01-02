@@ -52,9 +52,7 @@ var PlayVM =
 	
 	var compile = __webpack_require__(/*! ./compile */ 1);
 	
-	module.exports = {
-	  compile: compile
-	};
+	module.exports = compile;
 
 /***/ },
 /* 1 */

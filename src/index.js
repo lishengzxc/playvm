@@ -1,5 +1,3 @@
 var compile = require('./compile');
 
-module.exports = {
-  compile: compile
-};
+module.exports = compile;
