@@ -20,8 +20,10 @@ var isPair = function (name) {
 };
 
 var ModelDirective = require('./model');
+var TextDirective = require('./text');
 
 register('d-model', ModelDirective);
+register('d-text', TextDirective);
 
 module.exports = {
   register: register,
