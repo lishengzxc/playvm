@@ -6,15 +6,16 @@
 </head>
 <body>
 <div id="demo">
-  <input d-model="newTodo" placeholder="Input your new todo"/>
-  <button d-click="add()">Add</button>
-  <ul>
-    <li d-repeat="item in todos">
-      <input type="checkbox" d-model="item.done"/>
-      <span d-class="done:item.done">{{item.title}}</span>
-      <button d-click="remove(item)">Remove</button>
-    </li>
-  </ul>
+  <input d-model="newTodo" placeholder="placeholder"/>
+  <p>{{newTodo}}</p>
+  <!--<button d-click="add()">Add</button>-->
+  <!--<ul>-->
+    <!--<li d-repeat="item in todos">-->
+      <!--<input type="checkbox" d-model="item.done"/>-->
+      <!--<span d-class="done:item.done">{{item.title}}</span>-->
+      <!--<button d-click="remove(item)">Remove</button>-->
+    <!--</li>-->
+  <!--</ul>-->
 </div>
 <script src="dist/playvm.js"></script>
 <script>

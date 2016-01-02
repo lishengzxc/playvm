@@ -326,8 +326,10 @@ var PlayVM =
 	};
 	
 	var ModelDirective = __webpack_require__(/*! ./model */ 7);
+	var TextDirective = __webpack_require__(/*! ./text */ 19);
 	
 	register('d-model', ModelDirective);
+	register('d-text', TextDirective);
 	
 	module.exports = {
 	  register: register,
@@ -2405,6 +2407,58 @@ var PlayVM =
 	  return Math.ceil(ms / n) + ' ' + name + 's';
 	}
 
+
+/***/ },
+/* 19 */
+/*!*******************************!*\
+  !*** ./src/directive/text.js ***!
+  \*******************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Directive = __webpack_require__(/*! ./directive */ 8);
+	
+	var TextDirective = (function (_Directive) {
+	  _inherits(TextDirective, _Directive);
+	
+	  function TextDirective(options) {
+	    _classCallCheck(this, TextDirective);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(TextDirective).call(this, options));
+	  }
+	
+	  _createClass(TextDirective, [{
+	    key: 'update',
+	    value: function update() {
+	      var text = this.valueFn();
+	      if (text !== undefined && text !== null) {
+	        text = '' + text;
+	      } else {
+	        text = '';
+	      }
+	
+	      var element = this.element;
+	      if (element.nodeType === 3) {
+	        this.element.nodeValue = text;
+	      } else if (element.nodeType === 1) {
+	        this.element.innerText = text;
+	      }
+	    }
+	  }]);
+	
+	  return TextDirective;
+	})(Directive);
+	
+	module.exports = TextDirective;
 
 /***/ }
 /******/ ]);
