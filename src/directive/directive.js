@@ -1,3 +1,7 @@
+var expr = require('../parse/expr');
+var compileExpr = expr.compile;
+var getDepends = expr.getDepends;
+
 class Directive {
   constructor(options = {}) {
     this.element = options.element;
@@ -8,15 +12,31 @@ class Directive {
   }
 
   bind() {
-    // todo: ...
+    this.valueFn = compileExpr(this.expression, this.context);
+    var depends = getDepends(this.expression);
+    var context = this.context;
+
+    depends.forEach((depend) => {
+      context.$watch(depend, this)
+    });
   }
 
   unbind() {
-    // todo: ...
+    var depends = getDepends(this.expression);
+    var context = this.context;
+
+    depends.forEach((depend) => {
+      context.$unwatch(depend, this);
+    });
   }
 
   destroy() {
-    // todo: ...
+    this.unbind();
+
+    this.element = null;
+    this.expression = null;
+    this.context = null;
+    this.valueFn = null;
   }
 }
 
