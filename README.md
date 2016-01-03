@@ -9,7 +9,7 @@ http://lishengzxc.github.io/playvm/
 ### Todo
 - [x] model
 - [x] text(`{{}}`)
-- [ ] DOM.event
+- [x] DOM.event
 - [ ] attr
 - [ ] class
 - [ ] repeat

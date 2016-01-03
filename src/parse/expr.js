@@ -104,7 +104,8 @@ function getDepends(string) {
 }
 
 function compile(string, context) {
-  var converted = parse('newTodo');
+
+  var converted = parse(string);
   var body = 'return ' + converted + ';';
 
   var fn = FUNCTIONS_CACHE[string];

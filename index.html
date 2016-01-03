@@ -8,26 +8,27 @@
 <div id="demo">
   <input d-model="newTodo" placeholder="placeholder"/>
   <p>{{newTodo}}</p>
-  <!--<button d-click="add()">Add</button>-->
+  <button d-click="add()">Add</button>
   <!--<ul>-->
-    <!--<li d-repeat="item in todos">-->
-      <!--<input type="checkbox" d-model="item.done"/>-->
-      <!--<span d-class="done:item.done">{{item.title}}</span>-->
-      <!--<button d-click="remove(item)">Remove</button>-->
-    <!--</li>-->
+  <!--<li d-repeat="item in todos">-->
+  <!--<input type="checkbox" d-model="item.done"/>-->
+  <!--<span d-class="done:item.done">{{item.title}}</span>-->
+  <!--<button d-click="remove(item)">Remove</button>-->
+  <!--</li>-->
   <!--</ul>-->
 </div>
 <script src="dist/playvm.js"></script>
 <script>
   window.context = {
-    newTodo: "",
+    newTodo: '',
     todos: [
       {title: 'first', done: true},
       {title: 'second', done: false}
     ],
     add: function () {
-      this.todos.push({title: this.newTodo, done: false});
-      this.newTodo = '';
+      alert(JSON.stringify(this));
+//      this.todos.push({title: this.newTodo, done: false});
+//      this.newTodo = '';
     },
     remove: function (item) {
       this.todos.splice(this.todos.indexOf(item), 1);
