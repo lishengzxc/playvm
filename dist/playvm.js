@@ -50,42 +50,12 @@ var PlayVM =
 
 	'use strict';
 	
-	var walk = __webpack_require__(/*! ./walk */ 1);
-	var compile = __webpack_require__(/*! ./compile */ 2);
+	var compile = __webpack_require__(/*! ./compile */ 1);
 	
-	module.exports = {
-	  walk: walk,
-	  compile: compile
-	};
+	module.exports = compile;
 
 /***/ },
 /* 1 */
-/*!*********************!*\
-  !*** ./src/walk.js ***!
-  \*********************/
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	function walk(node, callback) {
-	  if (node.nodeType === 1 || node.nodeType === 3) {
-	    var returnValue = callback(node);
-	    if (returnValue === false) return;
-	  }
-	
-	  if (node.nodeType === 1) {
-	    var current = node.firstChild;
-	    while (current) {
-	      walk(current, callback);
-	      current = current.nextSibling;
-	    }
-	  }
-	}
-	
-	module.exports = walk;
-
-/***/ },
-/* 2 */
 /*!************************!*\
   !*** ./src/compile.js ***!
   \************************/
@@ -93,15 +63,15 @@ var PlayVM =
 
 	'use strict';
 	
-	var walk = __webpack_require__(/*! ./walk */ 1);
+	var walk = __webpack_require__(/*! ./walk */ 2);
 	var expression = __webpack_require__(/*! ./expression */ 3);
 	var inlineText = __webpack_require__(/*! ./parse/inline-text */ 4);
 	var directive = __webpack_require__(/*! ./directive */ 6);
 	var createDirective = directive.create;
 	var isPairDirective = directive.isPair;
 	var hasDirective = directive.has;
-	var bind = __webpack_require__(/*! ./bind */ 11);
-	var ViewModel = __webpack_require__(/*! ./view-model */ 12);
+	var bind = __webpack_require__(/*! ./bind */ 12);
+	var ViewModel = __webpack_require__(/*! ./view-model */ 13);
 	var maybeIncludeExpression = expression.maybeIncludeExpression;
 	
 	function compile(element, context) {
@@ -157,6 +127,32 @@ var PlayVM =
 	}
 	
 	module.exports = compile;
+
+/***/ },
+/* 2 */
+/*!*********************!*\
+  !*** ./src/walk.js ***!
+  \*********************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	function walk(node, callback) {
+	  if (node.nodeType === 1 || node.nodeType === 3) {
+	    var returnValue = callback(node);
+	    if (returnValue === false) return;
+	  }
+	
+	  if (node.nodeType === 1) {
+	    var current = node.firstChild;
+	    while (current) {
+	      walk(current, callback);
+	      current = current.nextSibling;
+	    }
+	  }
+	}
+	
+	module.exports = walk;
 
 /***/ },
 /* 3 */
@@ -304,6 +300,12 @@ var PlayVM =
 
 	'use strict';
 	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
 	var DirectiveMap = {};
 	
 	var register = function register(name, directive) {
@@ -311,7 +313,9 @@ var PlayVM =
 	};
 	
 	var create = function create(name, options) {
+	
 	  var createFunction = DirectiveMap[name];
+	
 	  return new createFunction(options);
 	};
 	
@@ -320,16 +324,50 @@ var PlayVM =
 	};
 	
 	var isPair = function isPair(name) {
+	
 	  var fn = DirectiveMap[name];
+	
 	  if (!fn) return false;
 	  return !!fn.prototype.isPair;
 	};
 	
 	var ModelDirective = __webpack_require__(/*! ./model */ 7);
-	var TextDirective = __webpack_require__(/*! ./text */ 19);
+	var TextDirective = __webpack_require__(/*! ./text */ 11);
+	var EventDirective = __webpack_require__(/*! ./event */ 20);
 	
 	register('d-model', ModelDirective);
 	register('d-text', TextDirective);
+	register('d-event', EventDirective);
+	
+	var events = ['click', 'focus', 'blur'];
+	
+	var addEvents = function addEvents(event) {
+	  register('d-' + event, (function (_EventDirective) {
+	    _inherits(e, _EventDirective);
+	
+	    function e(options) {
+	      _classCallCheck(this, e);
+	
+	      //this.isPair = false;
+	
+	      var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(e).call(this, options));
+	
+	      _this.event = event;
+	
+	      if (_this.element) {
+	        _this.element.addEventListener(_this.event, _this.valueFn, false);
+	      }
+	      return _this;
+	    }
+	
+	    return e;
+	  })(EventDirective));
+	};
+	
+	for (var i = 0, len = events.length; i < len; i++) {
+	  var event = events[i];
+	  addEvents(event);
+	}
 	
 	module.exports = {
 	  register: register,
@@ -621,7 +659,8 @@ var PlayVM =
 	}
 	
 	function compile(string, context) {
-	  var converted = parse('newTodo');
+	
+	  var converted = parse(string);
 	  var body = 'return ' + converted + ';';
 	
 	  var fn = FUNCTIONS_CACHE[string];
@@ -1269,6 +1308,58 @@ var PlayVM =
 
 /***/ },
 /* 11 */
+/*!*******************************!*\
+  !*** ./src/directive/text.js ***!
+  \*******************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Directive = __webpack_require__(/*! ./directive */ 8);
+	
+	var TextDirective = (function (_Directive) {
+	  _inherits(TextDirective, _Directive);
+	
+	  function TextDirective(options) {
+	    _classCallCheck(this, TextDirective);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(TextDirective).call(this, options));
+	  }
+	
+	  _createClass(TextDirective, [{
+	    key: 'update',
+	    value: function update() {
+	      var text = this.valueFn();
+	      if (text !== undefined && text !== null) {
+	        text = '' + text;
+	      } else {
+	        text = '';
+	      }
+	
+	      var element = this.element;
+	      if (element.nodeType === 3) {
+	        this.element.nodeValue = text;
+	      } else if (element.nodeType === 1) {
+	        this.element.innerText = text;
+	      }
+	    }
+	  }]);
+	
+	  return TextDirective;
+	})(Directive);
+	
+	module.exports = TextDirective;
+
+/***/ },
+/* 12 */
 /*!*********************!*\
   !*** ./src/bind.js ***!
   \*********************/
@@ -1279,6 +1370,7 @@ var PlayVM =
 	var directive = __webpack_require__(/*! ./directive */ 6);
 	var isPairDirective = directive.isPair;
 	var createDirective = directive.create;
+	var parsePair = __webpack_require__(/*! ./parse/parse-pair */ 21);
 	
 	function bind(element, collections, context) {
 	  for (var i = 0, len = collections.length; i < len; i++) {
@@ -1286,7 +1378,14 @@ var PlayVM =
 	    var type = collection.type;
 	
 	    if (isPairDirective(type)) {
-	      console.log(type);
+	      var pairs = parsePair(collection.value);
+	      for (var k = 0, l = pairs.length; k < l; k++) {
+	
+	        var pair = pairs[k];
+	        createDirective(collection.type, {
+	          element: element, expression: pair.value, context: context, key: pair.key, attr: collection.attr
+	        });
+	      }
 	    } else {
 	      createDirective(collection.type, {
 	        element: element,
@@ -1301,7 +1400,7 @@ var PlayVM =
 	module.exports = bind;
 
 /***/ },
-/* 12 */
+/* 13 */
 /*!***************************!*\
   !*** ./src/view-model.js ***!
   \***************************/
@@ -1311,7 +1410,7 @@ var PlayVM =
 	
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 	
-	var Observed = __webpack_require__(/*! observed */ 13);
+	var Observed = __webpack_require__(/*! observed */ 14);
 	
 	var ViewModel = function ViewModel(object) {
 	  var callbackMap = {};
@@ -1382,7 +1481,7 @@ var PlayVM =
 	module.exports = ViewModel;
 
 /***/ },
-/* 13 */
+/* 14 */
 /*!************************************!*\
   !*** ./~/observed/lib/observed.js ***!
   \************************************/
@@ -1390,9 +1489,9 @@ var PlayVM =
 
 	// http://wiki.ecmascript.org/doku.php?id=harmony:observe
 	
-	var Change = __webpack_require__(/*! ./change */ 14);
-	var Emitter = __webpack_require__(/*! events */ 15).EventEmitter;
-	var debug = __webpack_require__(/*! debug */ 16)('observed');
+	var Change = __webpack_require__(/*! ./change */ 15);
+	var Emitter = __webpack_require__(/*! events */ 16).EventEmitter;
+	var debug = __webpack_require__(/*! debug */ 17)('observed');
 	
 	module.exports = exports = Observable;
 	
@@ -1581,7 +1680,7 @@ var PlayVM =
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /*!**********************************!*\
   !*** ./~/observed/lib/change.js ***!
   \**********************************/
@@ -1609,7 +1708,7 @@ var PlayVM =
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /*!********************************************************!*\
   !*** (webpack)/~/node-libs-browser/~/events/events.js ***!
   \********************************************************/
@@ -1916,7 +2015,7 @@ var PlayVM =
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /*!***************************************!*\
   !*** ./~/observed/~/debug/browser.js ***!
   \***************************************/
@@ -1929,7 +2028,7 @@ var PlayVM =
 	 * Expose `debug()` as the module.
 	 */
 	
-	exports = module.exports = __webpack_require__(/*! ./debug */ 17);
+	exports = module.exports = __webpack_require__(/*! ./debug */ 18);
 	exports.log = log;
 	exports.formatArgs = formatArgs;
 	exports.save = save;
@@ -2083,7 +2182,7 @@ var PlayVM =
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /*!*************************************!*\
   !*** ./~/observed/~/debug/debug.js ***!
   \*************************************/
@@ -2102,7 +2201,7 @@ var PlayVM =
 	exports.disable = disable;
 	exports.enable = enable;
 	exports.enabled = enabled;
-	exports.humanize = __webpack_require__(/*! ms */ 18);
+	exports.humanize = __webpack_require__(/*! ms */ 19);
 	
 	/**
 	 * The currently active debug mode names, and names to skip.
@@ -2289,7 +2388,7 @@ var PlayVM =
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /*!******************************************!*\
   !*** ./~/observed/~/debug/~/ms/index.js ***!
   \******************************************/
@@ -2409,10 +2508,10 @@ var PlayVM =
 
 
 /***/ },
-/* 19 */
-/*!*******************************!*\
-  !*** ./src/directive/text.js ***!
-  \*******************************/
+/* 20 */
+/*!********************************!*\
+  !*** ./src/directive/event.js ***!
+  \********************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2427,38 +2526,120 @@ var PlayVM =
 	
 	var Directive = __webpack_require__(/*! ./directive */ 8);
 	
-	var TextDirective = (function (_Directive) {
-	  _inherits(TextDirective, _Directive);
+	var EventDirective = (function (_Directive) {
+	  _inherits(EventDirective, _Directive);
 	
-	  function TextDirective(options) {
-	    _classCallCheck(this, TextDirective);
+	  function EventDirective(options) {
+	    _classCallCheck(this, EventDirective);
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(TextDirective).call(this, options));
-	  }
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EventDirective).call(this, options));
 	
-	  _createClass(TextDirective, [{
-	    key: 'update',
-	    value: function update() {
-	      var text = this.valueFn();
-	      if (text !== undefined && text !== null) {
-	        text = '' + text;
-	      } else {
-	        text = '';
-	      }
-	
-	      var element = this.element;
-	      if (element.nodeType === 3) {
-	        this.element.nodeValue = text;
-	      } else if (element.nodeType === 1) {
-	        this.element.innerText = text;
+	    if (options) {
+	      if (options.key !== undefined) {
+	        _this.event = options.key;
 	      }
 	    }
+	
+	    return _this;
+	  }
+	
+	  _createClass(EventDirective, [{
+	    key: 'bind',
+	    value: function bind() {
+	      Directive.prototype.bind.call(this);
+	    }
+	  }, {
+	    key: 'update',
+	    value: function update() {}
 	  }]);
 	
-	  return TextDirective;
+	  return EventDirective;
 	})(Directive);
 	
-	module.exports = TextDirective;
+	EventDirective.prototype.isPair = true;
+	
+	module.exports = EventDirective;
+
+/***/ },
+/* 21 */
+/*!*********************************!*\
+  !*** ./src/parse/parse-pair.js ***!
+  \*********************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var parsePair = function parsePair(line) {
+	  var keyBeginIndex = 0;
+	  var valueBeginIndex = 0;
+	  var result = [];
+	  var currentPair = {};
+	  var index;
+	
+	  function appendPair() {
+	    currentPair.literal = line.slice(keyBeginIndex, index).trim();
+	
+	    if (currentPair.value === undefined) {
+	      currentPair.value = line.slice(valueBeginIndex, index).trim();
+	    }
+	
+	    if (index === 0 || currentPair.value) {
+	      result.push(currentPair);
+	    }
+	
+	    currentPair = {};
+	    keyBeginIndex = valueBeginIndex = index + 1;
+	  }
+	
+	  var quotationChar = null;
+	  var level = 0;
+	  var curChar = null;
+	  var prevChar = null;
+	  var charCount = line.length;
+	
+	  for (index = 0; index < charCount; index++) {
+	    prevChar = curChar;
+	    curChar = line.charAt(index);
+	
+	    if (curChar === '"' || curChar === '\'') {
+	      if (!quotationChar) {
+	        quotationChar = curChar;
+	        level++;
+	        continue;
+	      }
+	
+	      if (quotationChar && prevChar !== '\\' && curChar === quotationChar) {
+	        quotationChar = null;
+	        level--;
+	        continue;
+	      }
+	    }
+	
+	    if (!quotationChar) {
+	      if (curChar === ',' && level === 0) {
+	        appendPair();
+	      } else if (curChar === ':' && !currentPair.key && !currentPair.value) {
+	        var key = line.slice(keyBeginIndex, index).trim();
+	        if (key.length > 0) {
+	          currentPair.key = key;
+	          valueBeginIndex = index + 1;
+	        }
+	      } else if (curChar === '(' || curChar === '[' || curChar === '{') {
+	        level++;
+	      } else if (curChar === ')' || curChar === ']' || curChar === '}') {
+	        level--;
+	      }
+	    }
+	  }
+	
+	  if (index === 0 || keyBeginIndex !== index) {
+	    appendPair();
+	  }
+	
+	  return result;
+	};
+	
+	module.exports = parsePair;
 
 /***/ }
 /******/ ]);
