@@ -10,7 +10,7 @@ http://lishengzxc.github.io/playvm/
 - [x] model
 - [x] text(`{{}}`)
 - [x] DOM.event
-- [ ] attr
+- [x] attr
 - [ ] class
 - [ ] repeat
 
