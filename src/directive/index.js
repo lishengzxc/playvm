@@ -7,7 +7,6 @@ var register = function (name, directive) {
 var create = function (name, options) {
 
   var createFunction = DirectiveMap[name];
-
   return new createFunction(options);
 };
 
@@ -26,10 +25,12 @@ var isPair = function (name) {
 var ModelDirective = require('./model');
 var TextDirective = require('./text');
 var EventDirective = require('./event');
+var AttrDirective = require('./attr');
 
 register('d-model', ModelDirective);
 register('d-text', TextDirective);
 register('d-event', EventDirective);
+register('d-attr', AttrDirective);
 
 var events = ['click', 'focus', 'blur'];
 

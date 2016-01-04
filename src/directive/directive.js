@@ -7,7 +7,7 @@ class Directive {
     this.element = options.element;
     this.expression = options.expression;
     this.context = options.context;
-
+    this.attr = options.attr;
     this.bind();
   }
 
@@ -44,6 +44,7 @@ class Directive {
   }
 
   update() {
+    console.log(1);
 
   }
 }
